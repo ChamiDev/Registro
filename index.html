@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=none">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="Chami">
+    <meta name="description" content="Zona de Publicación de Cambios">
+    <link rel="icon" href="https://um2410.renderforest.com/u25148551/visuals/9d9af7d1-196b-4b8d-adb6-398414c40274.png" type="image/png">
+    <title>Chami Dev - Registros de Cambio</title>
+    <style>
+        /* General Body Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1a202c; /* Dark background */
+            color: #e2e8f0; /* Light text */
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #edf2f7; /* Lighter text for headings */
+        }
+
+        /* Registro Card Styles */
+        .registro {
+            background: #2d3748; /* Dark card background */
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .registro h2 {
+            margin-top: 0;
+            color: #e2e8f0; /* Light text for titles */
+        }
+
+        .registro p {
+            margin: 5px 0;
+        }
+
+        .registro .fecha {
+            font-size: 0.9em;
+            color: #cbd5e0; /* Lighter color for dates */
+        }
+
+        .registro .descripcion {
+            font-style: italic;
+            color: #edf2f7; /* Light color for descriptions */
+        }
+
+        /* Styling for links and hover effects */
+        a {
+            color: #63b3ed; /* Light blue for links */
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Registros de Cambio</h1>
+    <div id="registros"></div>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+        
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBsQUGJvILzFwr22ILWswOZdBViJ8skwEM",
+            authDomain: "chami-5ebc9.firebaseapp.com",
+            databaseURL: "https://chami-5ebc9-default-rtdb.firebaseio.com",
+            projectId: "chami-5ebc9",
+            storageBucket: "chami-5ebc9.firebasestorage.app",
+            messagingSenderId: "84885826735",
+            appId: "1:84885826735:web:bf8d14ed71eef46858785a",
+            measurementId: "G-SZQE0FJZVE"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Reference to the "registros" node in your Firebase Realtime Database
+        const registrosRef = ref(database, 'registros/');
+
+        // Listen for real-time changes
+        onValue(registrosRef, (snapshot) => {
+            const data = snapshot.val();
+            const registrosContainer = document.getElementById('registros');
+            registrosContainer.innerHTML = ''; // Clear previous content
+
+            // Loop through each change record and display it
+            for (const key in data) {
+                const registro = data[key];
+                const registroDiv = document.createElement('div');
+                registroDiv.classList.add('registro');
+                registroDiv.innerHTML = `
+                    <h2>Cambio #${registro.numero}</h2>
+                    <p><strong>Proyecto:</strong> ${registro.proyecto}</p>
+                    <p class="fecha"><strong>Fecha:</strong> ${registro.fecha}</p>
+                    <p><strong>Modificado por:</strong> ${registro.nombreModificador}</p>
+                    <p class="descripcion"><strong>Descripción:</strong> ${registro.descripcion}</p>
+                `;
+                registrosContainer.appendChild(registroDiv);
+            }
+        });
+    </script>
+
+</body>
+
+</html>
